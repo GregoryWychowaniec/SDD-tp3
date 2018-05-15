@@ -3,12 +3,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "pile.h"
 
 #define TAILLE 50
 
+typedef char type_arbre;
 
+typedef struct arbre{
+	type_arbre val;
+	struct arbre* lv;
+	struct arbre* lh;
+}arbre_t;
 
-arbre_t* creationArbre(char* nomFichier);
+int creerCellule(arbre_t** ptr, type_arbre val);
+void creationArbre(arbre_t** arbre, char* nomFichier);
 
 #endif

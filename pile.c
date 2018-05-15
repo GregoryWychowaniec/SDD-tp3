@@ -1,23 +1,23 @@
 /*----------------------------------------------------------------------*/
 /*pile.c									                            */
-/*      Fichier qui contient l'implémentation des fonctions de pile.h	*/
+/*      Fichier qui contient l'implï¿½mentation des fonctions de pile.h	*/
 /*----------------------------------------------------------------------*/
 #include "pile.h"
 
 /*-------------------------------------------------------------------------*/
-/*initialiserPile		Créé une pile vide									*/
-/*Entrée : 				taille : taille maximale de la pile					*/
-/*Sortie : 				po :  tête de la pile vide							*/
+/*initialiserPile		Crï¿½ï¿½ une pile vide									*/
+/*Entrï¿½e : 				taille : taille maximale de la pile					*/
+/*Sortie : 				po :  tï¿½te de la pile vide							*/
 /*-------------------------------------------------------------------------*/
 pile_t* initialiserPile(int taille)
 {
-	pile_t* po = (pile_t*) malloc(sizeof(pile_t));  //On alloue de la mémoire pour une pile
-	if(po)  //Si l'allocation a marché
+	pile_t* po = (pile_t*) malloc(sizeof(pile_t));  //On alloue de la mï¿½moire pour une pile
+	if(po)  //Si l'allocation a marchï¿½
 	{
 		po->taille=taille;  //On initialise les valeurs dans la structure
 		po->sommet=-1;  //La valeur -1 indique que la pile est vide
-		po->base=(type_t*) malloc(taille*sizeof(type_t)*sizeof(type_t));    //On alloue de la mémoire pour les valeurs
-		if(!po->base)   //Si l'allocation n'a pas fonctionné, on libère la pile
+		po->base=(type_t*) malloc(taille*sizeof(int));    //On alloue de la mï¿½moire pour les valeurs
+		if(!po->base)   //Si l'allocation n'a pas fonctionnï¿½, on libï¿½re la pile
 		{
 			free(po);
 			po=NULL;
@@ -27,19 +27,19 @@ pile_t* initialiserPile(int taille)
 }
 
 /*-------------------------------------------------------------------------*/
-/*libererPile		Libère une pile 										*/
-/*Entrée : 				p: tête la pile 								    */
+/*libererPile		Libï¿½re une pile 										*/
+/*Entrï¿½e : 				p: tï¿½te la pile 								    */
 /*-------------------------------------------------------------------------*/
 void libererPile(pile_t* p)
 {
-	free(p->base);  //On libère la mémoire des valeurs
-	free(p);        //On libère la pile
+	free(p->base);  //On libï¿½re la mï¿½moire des valeurs
+	free(p);        //On libï¿½re la pile
 	p=NULL;
 }
 
 /*-------------------------------------------------------------------------*/
-/*estVidePile		détermine si la pile est vide							*/
-/*Entrée : 				p : tête de la pile									*/
+/*estVidePile		dï¿½termine si la pile est vide							*/
+/*Entrï¿½e : 				p : tï¿½te de la pile									*/
 /*Sortie : 				1 si la pile est vide, 0 sinon						*/
 /*-------------------------------------------------------------------------*/
 int estVidePile(pile_t* p)
@@ -48,57 +48,59 @@ int estVidePile(pile_t* p)
 }
 
 /*-------------------------------------------------------------------------*/
-/*empiler		empile l'élément souhaité dans notre pile					*/
-/*Entrée : 				p : tête de la pile									*/
-/*						v : adresse de l'élément à ajouter				    */
-/*Sortie : 				code : variable de vérification pour savoir 		*/
-/*									si l'empilement a fonctionné			*/
+/*empiler		empile l'ï¿½lï¿½ment souhaitï¿½ dans notre pile					*/
+/*Entrï¿½e : 				p : tï¿½te de la pile									*/
+/*						v : adresse de l'ï¿½lï¿½ment ï¿½ ajouter				    */
+/*Sortie : 				code : variable de vï¿½rification pour savoir 		*/
+/*									si l'empilement a fonctionnï¿½			*/
 /*-------------------------------------------------------------------------*/
-int empiler(pile_t* p, type_t* v)
+int empiler(pile_t* p, type_t v)
 {
 	int code = 0;
 	if(p->sommet<(p->taille)-1) //On teste s'il y a encore de la place dans la pile
 	{
-		p->sommet++;    //On ajoute un élément
-		*((p->base)+(p->sommet)*sizeof(type_t))=*v; //On insère la valeur au sommet de la pile
-		code=1; //On indique que l'empilement a fonctionné
+		p->sommet++;    //On ajoute un ï¿½lï¿½ment
+		*((p->base)+(p->sommet)*sizeof(type_t)) = v; //On insï¿½re la valeur au sommet de la pile
+		//Ou p->base[p->sommet]=v;
+		code=1; //On indique que l'empilement a fonctionnï¿½
 	}
 	return code;
 }
 
 /*-------------------------------------------------------------------------*/
 /*depiler		depile une valeur de la pile								*/
-/*Entrée : 				p : tête de la pile									*/
-/*							code : variable de vérification pour savoir 	*/
-/*									si l'empilement a fonctionné			*/
-/*Sortie : 				adrV : adresse de notre élément dépilé				*/
+/*Entrï¿½e : 				p : tï¿½te de la pile									*/
+/*							code : variable de vï¿½rification pour savoir 	*/
+/*									si l'empilement a fonctionnï¿½			*/
+/*Sortie : 				adrV : adresse de notre ï¿½lï¿½ment dï¿½pilï¿½				*/
 /*-------------------------------------------------------------------------*/
-type_t* depiler(pile_t* p, int* code)
+type_t depiler(pile_t* p, int* code)
 {
-	type_t* adrV=NULL;
+	type_t adrV=NULL;
 	*code = 0;
-	if(!estVidePile(p)) //On teste s'il reste des éléments dans la pile à dépiler
+	if(!estVidePile(p)) //On teste s'il reste des ï¿½lï¿½ments dans la pile ï¿½ dï¿½piler
 	{
-		adrV=((p->base)+(p->sommet)*sizeof(type_t));    //On récupère l'adresse de l'élément au sommet
-		p->sommet--;    //On enlève un élément
-		*code=1;    //On indique que le dépilement a fonctionné
+		adrV=*((p->base)+(p->sommet)*sizeof(type_t));    //On rï¿½cupï¿½re l'adresse de l'ï¿½lï¿½ment au sommet
+		//Ou adrV = p->base[p->rang];
+		p->sommet--;    //On enlï¿½ve un ï¿½lï¿½ment
+		*code=1;    //On indique que le dï¿½pilement a fonctionnï¿½
 	}
-	return adrV;    //On retourne l'adresse de l'élément
+	return adrV;    //On retourne l'adresse de l'ï¿½lï¿½ment
 }
 
 
 /*-------------------------------------------------------------------------*/
 /*affichePile		Affiche le contenu d'une pile de type int du sommet     */
 /*                                vers la base de la pile                    */
-/*Entrée : 				p : tête de la pile									*/
+/*Entrï¿½e : 				p : tï¿½te de la pile									*/
 /*-------------------------------------------------------------------------*/
 /*
 void affichePile(pile_t* p){
-    int t=p->sommet;    //On récupère le nombre d'éléments dans la pile
+    int t=p->sommet;    //On rï¿½cupï¿½re le nombre d'ï¿½lï¿½ments dans la pile
     printf("Contenu de la pile : \n");
     if(!estVidePile(p)) //On indique si la pile est vide ou non
     {
-        while(t>=0) //On parcourt tous les éléments
+        while(t>=0) //On parcourt tous les ï¿½lï¿½ments
         {
             printf("%d\n", *(p->base+t*sizeof(type_t)));
             t--;

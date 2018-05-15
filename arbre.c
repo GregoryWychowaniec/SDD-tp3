@@ -1,33 +1,48 @@
 #include "arbre.h"
+#include "pile.h"
 
-arbre_t* creationArbre(char* nomFichier)
+int creerCellule(arbre_t** ptr, type_arbre val)
 {
-	char tmp;
+	int code = 0;
+	*ptr = (arbre_t*) malloc(sizeof(arbre_t));
+	if (*ptr) {
+		(*ptr)->val = val;
+		(*ptr)->lv = NULL;
+		(*ptr)->lh = NULL;
+		code = 1;
+	}
+	return code;
+}
+
+void creationArbre(arbre_t** arbre, char* nomFichier)
+{
+	type_arbre tmp;
+	arbre_t** prec = arbre;
 	arbre_t* cour = NULL;
 	FILE* fichier = fopen(nomFichier, "r");
 	pile_t* pile = initialiserPile(TAILLE);
-	int type = 2;
+	//int type = 2;
 	int code;
 	if(fichier)
 	{
-		fscanf(fichier, "%c", &tmp);
+		fscanf(fichier, "%c", &tmp);	//Enlève la première parenthèse
 		while(!feof(fichier))
 		{
 			fscanf(fichier, "%c", &tmp);
 			printf("%c\n", tmp);
 			if(cour!=NULL)
 				printf("%c\n", cour->val);
-			
 			switch (tmp)
 			{
 			case '(':
-		  		type=0;
-		  		code = empiler(pile, cour);
+		  		//type=0;
+		  		code = empiler(pile, &cour->lh);
+					prec = &cour->lv;
 		 	break;
 			case ')':
-		  		type=1;
-		  		cour=depiler(pile, &code);
-		  		if(estVidePile(pile))
+		  		//type=1;
+		  		prec = depiler(pile, &code);
+		  		if(estVidePile(pile))	//Quand on arrive à la fin de la ligne
 		  		{
 		  			fscanf(fichier, "%c", &tmp);
 		  			fscanf(fichier, "%c", &tmp);
@@ -35,9 +50,13 @@ arbre_t* creationArbre(char* nomFichier)
 		  		}
 		  	break;
 			case ',':
-		  		type=1;
+		  		//type=1;
+					prec = &cour->lh;
 		  	break;
 			default:
+				creerCellule(&cour, tmp);
+				*prec = cour;
+				/*
 		  		if(type==0)
 		  		{
 		  			//lv
@@ -58,10 +77,10 @@ arbre_t* creationArbre(char* nomFichier)
 		  			cour = (type_t*) malloc(sizeof(arbre_t));
 		  			cour->val=tmp;
 		  		}
+					*/
 		  	break;
 			}
 		}
 	}
 	fclose(fichier);
-	return cour;
 }
